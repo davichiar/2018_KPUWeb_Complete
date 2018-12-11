@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.io.PrintWriter"%>
+<%@ page import="user.UserDAO"%>
+<%@ page import="evaluation.EvaluationDAO"%>
+<%@ page import="evaluation.EvaluationDTO"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.net.URLEncoder"%>
 
 <!doctype html>
 <html>
@@ -17,24 +22,24 @@
   </head>
 
   <body>
-  	<%
+  <%
 		String userID = null;
 	
 		if(session.getAttribute("userID") != null) {
 			userID = (String) session.getAttribute("userID");
 		}
 	
-		if(userID != null) {
+		if(userID == null) {
 			PrintWriter script = response.getWriter();
-	
 			script.println("<script>");
-			script.println("alert('로그인이 된 상태입니다.');");
-			script.println("location.href = 'index.jsp'");
+			script.println("alert('로그인을 해주세요.');");
+			script.println("location.href = 'userLogin.jsp'");
 			script.println("</script>");
-			script.close();	
+			script.close();
+			return;
 		}
-	%>	
-
+%>
+	
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="index.jsp">DVCLJ - 강의 평가 사이트</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
@@ -43,22 +48,39 @@
 
       <div class="collapse navbar-collapse" id="navbar">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="index.jsp">강의 평가</a>
-          </li>
-
+          
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="dropdown" data-toggle="dropdown">
-              회원 관리
+              포트폴리오
             </a>
 
             <div class="dropdown-menu" aria-labelledby="dropdown">
-              <% if(userID == null) { %>
+              <a class="dropdown-item" href="myself.html">메인</a>
+              <a class="dropdown-item" href="davichi.html">정다비치</a>
+              <a class="dropdown-item" href="leejuho.html">이주호</a>
+            </div>
+          </li>
+          
+          <li class="nav-item active">
+            <a class="nav-link" href="index.jsp">강의 평가</a>
+          </li>
+          
+          <li class="nav-item active">
+            <a class="nav-link" href="bbs.jsp">자유 게시판</a>
+          </li>
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="dropdown" data-toggle="dropdown">
+              <%= userID %> 님
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="dropdown">
+            <% if(userID == null) { %>
               <a class="dropdown-item" href="userLogin.jsp">로그인</a>
               <a class="dropdown-item" href="userRegister.jsp">회원가입</a>
-              <% } else { %>
+            <% } else { %>
               <a class="dropdown-item" href="userLogout.jsp">로그아웃</a>
-              <% } %>
+            <% } %>
             </div>
           </li>
         </ul>
@@ -70,25 +92,28 @@
       </div>
     </nav>
 
-	<div class="container mt-3" style="max-width: 560px;">
-      <form method="post" action="./userRegisterAction.jsp">
-        <div class="form-group">
-          <label>아이디</label>
-          <input type="text" name="userID" class="form-control">
-        </div>
 
-        <div class="form-group">
-          <label>비밀번호</label>
-          <input type="password" name="userPassword" class="form-control">
-        </div>
-
-        <div class="form-group">
-          <label>이메일</label>
-          <input type="email" name="userEmail" class="form-control">
-        </div>
-
-        <button type="submit" class="btn btn-primary">회원가입</button>
-      </form>
+    <div class="container">
+    	<div class="row">
+    		<form method="post" action="writeAction.jsp" class="container">
+    			<table class="table table-striped mt-4 mx-4" style="text-align: center; border: 1px solid #dddddd; ">
+	    			<thead>
+	    				<tr>
+	    					<th colspan="2" style="background-color: #eeeeee; text-align: center;">게시판 글쓰기 양식</th>
+	    				</tr>
+	    			</thead>
+	    			<tbody>
+	    				<tr>
+	    					<td><input type="text" class="form-control" placeholder="글 제목" name="bbsTitle" maxlength="50"></td>
+	    				</tr>
+	    				<tr>
+	    					<td><textarea class="form-control" placeholder="글 내용" name="bbsContent" maxlength="2048" style="height: 350px;"></textarea></td>
+	    				</tr>
+	    			</tbody>
+    			</table>
+    			<input type="submit" class="btn btn-primary float-right" value="글쓰기">
+    		</form>
+    	</div>
     </div>
 
     <footer class="bg-dark mt-4 p-5 text-center" style="color: #FFFFFF;">

@@ -106,7 +106,7 @@
 
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="index.jsp">DVCLJ - 강의 평가, 알고리즘</a>
+      <a class="navbar-brand" href="index.jsp">DVCLJ - 강의 평가 사이트</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
         <span class="navbar-toggler-icon"></span>
       </button>
